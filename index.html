@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tile Effect Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game">
+        <h1 id="title">Tile Effect</h1>
+        <div id="grid"></div>
+        <div id="controls">
+            <div id="buttons"></div>
+            <p>Moves: <span id="moveCount">0</span></p>
+            <button id="solveButton">Solve</button>
+        </div>
+    </div>
+
+    <div id="statsPopup" class="popup hidden">
+        <h2>Statistics</h2>
+    
+       <!-- Grid layout for scores and main stats -->
+    <div class="stats-grid">
+        <div class="score-stats">
+            <div class="stat">
+                <p class="stat-value" id="parScore">0</p>
+                <p class="stat-label">Par</p>
+            </div>
+            <div class="stat">
+                <p class="stat-value" id="actualScore">0</p>
+                <p class="stat-label">Score</p>
+            </div>
+        </div>
+
+        <!-- Main stats row -->
+        <div class="main-stats">
+            <div class="stat">
+                <p class="stat-value" id="gamesPlayed">0</p>
+                <p class="stat-label">Played</p>
+            </div>
+            <div class="stat">
+                <p class="stat-value" id="winPercentage">0</p>
+                <p class="stat-label">Win %</p>
+            </div>
+            <div class="stat">
+                <p class="stat-value" id="currentStreak">0</p>
+                <p class="stat-label">Current<br>Streak</p>
+            </div>
+            <div class="stat">
+                <p class="stat-value" id="maxStreak">0</p>
+                <p class="stat-label">Max<br>Streak</p>
+            </div>
+        </div>
+    </div>
+        
+        <!-- Guess distribution -->
+        <h3>Guess Distribution</h3>
+        <div id="guessDistribution" class="distribution-chart"></div>
+    
+        <!-- Close button -->
+        <button id="closePopup" onclick="closePopup()">Close</button>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>

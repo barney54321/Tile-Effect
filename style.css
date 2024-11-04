@@ -1,0 +1,208 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
+
+
+/* Reset default styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+    font-family: 'Arial', sans-serif;
+}
+
+#game {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+#grid {
+    display: grid;
+    grid-template-columns: repeat(6, 60px);
+    grid-gap: 5px;
+    margin-bottom: 20px;
+}
+
+.square {
+    width: 60px;
+    height: 60px;
+    background-color: grey;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.square:active {
+    transform: scale(0.95);
+}
+
+#controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.color-button {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.2s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.color-button:active {
+    transform: scale(0.9);
+}
+
+#solveButton {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    background-color: #555;
+    color: white;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#solveButton:hover {
+    background-color: #333;
+}
+
+#solveButton:active {
+    transform: scale(0.95);
+}
+
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255, 255, 255, 0.95);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    width: 80%;
+    max-width: 400px;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+}
+
+.hidden {
+    display: none;
+}
+
+h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Two columns for the first row */
+    gap: 20px; /* Space between the grid items */
+    margin-bottom: 20px; /* Space below the grid */
+}
+
+.score-stats {
+    grid-column: span 2; /* Make score stats span both columns */
+    display: contents; /* Use the parent's grid properties */
+}
+
+.main-stats {
+    grid-column: span 2; /* Ensure the main stats occupy both columns */
+    display: contents; /* Use the parent's grid properties */
+}
+
+.stat {
+    text-align: center; /* Center the text within each stat */
+}
+
+.stat-value {
+    font-size: 2em;
+    color: #333;
+}
+
+.stat-label {
+    font-size: 0.9em;
+    color: #666;
+    line-height: 1.2;
+}
+
+.main-stats {
+    grid-template-columns: repeat(4, 1fr); /* Four columns for the main stats */
+    display: grid; /* Make main stats a grid */
+}
+
+.distribution-chart {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.distribution-bar {
+    display: flex;
+    justify-content: flex-end; /* Aligns the count to the right */
+    align-items: center;
+    height: 20px;
+    background-color: #6366F1;
+    color: white;
+    border-radius: 4px;
+    padding-right: 5px; /* Adds padding to the right for spacing */
+}
+
+.distribution-bar-count {
+    font-size: 0.9em;
+    color: #333;
+    width: 20px;
+    text-align: right;
+    margin-right: 5px; /* Adds space between the number and the bar */
+}
+
+#closePopup {
+    background-color: #6366F1; /* Primary button color */
+    color: white; /* Text color */
+    border: none; /* Remove default border */
+    border-radius: 8px; /* Rounded corners */
+    padding: 10px 15px; /* Padding for size */
+    font-size: 1em; /* Font size */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s, transform 0.2s; /* Smooth transitions */
+    margin-top: 20px; /* Space above the button */
+}
+
+#closePopup:hover {
+    background-color: #4F46E5; /* Darker shade on hover */
+    transform: translateY(-2px); /* Lift effect on hover */
+}
+
+#closePopup:active {
+    transform: translateY(1px); /* Push down effect on click */
+}
