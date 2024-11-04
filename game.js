@@ -10,7 +10,6 @@ const rippleDelay = 50; // Delay in milliseconds for each layer of the ripple
 const gridContainer = document.getElementById("grid");
 const buttonsContainer = document.getElementById("buttons");
 const moveCountDisplay = document.getElementById("moveCount");
-const solveButton = document.getElementById("solveButton");
 const title = document.getElementById("title");
 
 // Initialize the grid
@@ -38,6 +37,8 @@ function initGrid() {
         gridContainer.appendChild(square);
         grid.push(square);
     }
+
+    handleSolve();
 }
 
 // Initialize color buttons
@@ -464,10 +465,6 @@ function closePopup() {
     document.getElementById("statsPopup").classList.add("hidden");
     resetGame();
 }
-
-
-// Add event listener to the "Solve" button
-solveButton.addEventListener("click", handleSolve);
 
 // Initialize everything
 initGrid();
