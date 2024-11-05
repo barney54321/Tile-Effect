@@ -27,6 +27,12 @@ function initGrid() {
     if (gameMode === GameMode.DAILY) {
         const date = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
         randomFunc = seededRandom(date);
+
+        // Attempt to load saved game state for Daily mode
+        if (loadGameState()) {
+            // Saved state was successfully loaded, so no need to initialize a new grid
+            return;
+        }
     } else {
         randomFunc = Math.random;
     }
@@ -94,6 +100,7 @@ function rippleEffect(colorIndex) {
     function processLayer() {
         if (queue.length === 0) {
             canClick = true;
+            saveGameState();
             checkWinCondition();
             return;
         }
@@ -516,4 +523,53 @@ function seededRandom(seed) {
         hash = (hash * 9301 + 49297) % 233280;
         return hash / 233280;
     };
+}
+
+function saveGameState() {
+    if (gameMode !== GameMode.DAILY) {
+        return;
+    }
+
+    const date = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+    const gridState = grid.map(square => parseInt(square.dataset.colorIndex));
+    const gameState = {
+        date,
+        gridState,
+        moveCount
+    };
+
+    localStorage.setItem('tileEffectDailyState', JSON.stringify(gameState));
+}
+
+function loadGameState() {
+    const savedState = localStorage.getItem('tileEffectDailyState');
+    if (!savedState) {
+        return false; // No saved state, so initialize a new game
+    }
+
+    // Parse the saved state
+    const gameState = JSON.parse(savedState);
+
+    for (let i = 0; i < gridSize * gridSize; i++) {
+        const square = document.createElement("div");
+        square.classList.add("square");
+        square.dataset.index = i;
+
+        let colorIndex = gameState.gridState[i];
+        square.style.backgroundColor = colorIndex >= 0 ? colors[colorIndex] : startColor;
+        square.dataset.colorIndex = colorIndex;
+
+        gridContainer.appendChild(square);
+        grid.push(square);
+
+        if (i == gridSize * gridSize - gridSize) {
+            baseSquare = square;
+        }
+    }
+
+    return true; // Successfully loaded the game state
+}
+
+function clearSave() {
+    localStorage.removeItem('tileEffectDailyState'); 
 }

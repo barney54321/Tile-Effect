@@ -37,6 +37,10 @@ body {
     margin-bottom: 20px;
 }
 
+#moveBlock {
+    font-family: "Poppins", sans-serif;
+}
+
 .square {
     width: 60px;
     height: 60px;
