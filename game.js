@@ -1,3 +1,8 @@
+const GameMode = Object.freeze({
+    DAILY: Symbol("endless"),
+    ENDLESS: Symbol("endless")
+})
+
 const gridSize = 6;
 const startColor = "#808080";
 const colors = ["#1E3A8A", "#10B981", "#F59E0B", "#EF4444", "#6366F1", "#F472B6"];
@@ -5,6 +10,7 @@ let moveCount = 0;
 let currentBaseColor = null;
 let baseSquare = null;
 let canClick = true;
+let gameMode = GameMode.DAILY;
 const rippleDelay = 50; // Delay in milliseconds for each layer of the ripple
 
 const gridContainer = document.getElementById("grid");
@@ -466,6 +472,20 @@ function closePopup() {
     resetGame();
 }
 
-// Initialize everything
-initGrid();
-initButtons();
+function startDaily() {
+    gameMode = GameMode.DAILY;
+    initGrid();
+    initButtons();
+    hideMenu();
+}
+
+function startEndless() {
+    gameMode = GameMode.ENDLESS;
+    initGrid();
+    initButtons();
+    hideMenu();
+}
+
+function hideMenu() {
+    document.getElementById("mainMenu").style.display = "none";
+}
