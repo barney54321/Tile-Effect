@@ -44,7 +44,9 @@ function initGrid() {
         grid.push(square);
     }
 
-    handleSolve();
+    if (gameMode == GameMode.DAILY) {
+        handleSolve();
+    }
 }
 
 // Initialize color buttons
@@ -127,8 +129,11 @@ function checkWinCondition() {
     const allSameColor = grid.every(square => parseInt(square.dataset.colorIndex) === targetColorIndex);
     
     if (allSameColor) {
-        // setTimeout(() => alert(`You won in ${moveCount} moves!`), 200);
-        showStatsPopup();
+        if (gameMode == GameMode.DAILY) {
+            showStatsPopup();
+        } else {
+            resetGame();
+        }
     }
 }
 
@@ -469,11 +474,12 @@ function showStatsPopup() {
 // Function to close the stats popup
 function closePopup() {
     document.getElementById("statsPopup").classList.add("hidden");
-    resetGame();
+    startEndless();
 }
 
 function startDaily() {
     gameMode = GameMode.DAILY;
+    document.getElementById("moveBlock").style.opacity = 1;
     initGrid();
     initButtons();
     hideMenu();
@@ -481,6 +487,7 @@ function startDaily() {
 
 function startEndless() {
     gameMode = GameMode.ENDLESS;
+    document.getElementById("moveBlock").style.opacity = 0;
     initGrid();
     initButtons();
     hideMenu();
