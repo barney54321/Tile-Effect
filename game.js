@@ -567,6 +567,8 @@ function loadGameState() {
         }
     }
 
+    checkWinCondition();
+
     return true; // Successfully loaded the game state
 }
 
