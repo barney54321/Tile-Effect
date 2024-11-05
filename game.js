@@ -23,6 +23,14 @@ function initGrid() {
     grid = [];
     gridContainer.innerHTML = '';
 
+    let randomFunc;
+    if (gameMode === GameMode.DAILY) {
+        const date = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+        randomFunc = seededRandom(date);
+    } else {
+        randomFunc = Math.random;
+    }
+
     for (let i = 0; i < gridSize * gridSize; i++) {
         const square = document.createElement("div");
         square.classList.add("square");
@@ -35,7 +43,7 @@ function initGrid() {
             baseSquare = square;
             currentBaseColor = colorIndex;
         } else {
-            colorIndex = Math.floor(Math.random() * colors.length);
+            colorIndex = Math.floor(randomFunc() * colors.length);
             square.style.backgroundColor = colors[colorIndex];
             square.dataset.colorIndex = colorIndex;
         }
@@ -495,4 +503,17 @@ function startEndless() {
 
 function hideMenu() {
     document.getElementById("mainMenu").style.display = "none";
+}
+
+function seededRandom(seed) {
+    // ChatGPT random function - doesn't actually need to be random, just needs to generate
+    // a different function per day
+    let hash = 0;
+    for (let i = 0; i < seed.length; i++) {
+        hash = seed.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return function() {
+        hash = (hash * 9301 + 49297) % 233280;
+        return hash / 233280;
+    };
 }
