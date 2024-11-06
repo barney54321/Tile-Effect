@@ -550,6 +550,10 @@ function loadGameState() {
     // Parse the saved state
     const gameState = JSON.parse(savedState);
 
+    if (gameState.date !== new Date().toISOString().slice(0, 10)) {
+        return false;
+    }
+
     for (let i = 0; i < gridSize * gridSize; i++) {
         const square = document.createElement("div");
         square.classList.add("square");
