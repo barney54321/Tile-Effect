@@ -6,7 +6,6 @@ const GameMode = Object.freeze({
 const gridSize = 6;
 const startColor = "#808080";
 const colors = ["#1E3A8A", "#10B981", "#F59E0B", "#EF4444", "#6366F1", "#F472B6"];
-let moveCount = 0;
 let currentBaseColor = null;
 let baseSquare = null;
 let canClick = true;
@@ -17,6 +16,31 @@ const gridContainer = document.getElementById("grid");
 const buttonsContainer = document.getElementById("buttons");
 const moveCountDisplay = document.getElementById("moveCount");
 const title = document.getElementById("title");
+
+function loadHistoricData() {
+    const data = localStorage.getItem("tileEffectGameData");
+
+    if (!data) {
+        return {
+            gamesPlayed: 0,
+            winPercentage: 0,
+            currentStreak: 0,
+            maxStreak: 0,
+            guessDistribution: [0, 0, 0, 0, 0, 0], // Number of games solved on each guess attempt
+            parScore: -1,
+            actualScore: 0
+        }
+    }
+
+    return JSON.parse(data);
+}
+
+const gameData = loadHistoricData();
+moveCountDisplay.textContent = gameData.actualScore;
+
+function saveHistoricalData() {
+    localStorage.setItem("tileEffectGameData", JSON.stringify(gameData));
+}
 
 // Initialize the grid
 function initGrid() {
@@ -79,8 +103,8 @@ function initButtons() {
 function handleColorChange(colorIndex) {
     if (canClick && colorIndex !== parseInt(baseSquare.dataset.colorIndex)) {
         canClick = false;
-        moveCount++;
-        moveCountDisplay.textContent = moveCount;
+        gameData.actualScore++;
+        moveCountDisplay.textContent = gameData.actualScore;
         rippleEffect(colorIndex);
     }
 }
@@ -153,9 +177,6 @@ function checkWinCondition() {
 }
 
 function resetGame() {
-    moveCount = 0;
-    moveCountDisplay.textContent = moveCount;
-
     let currentWave = [baseSquare]; // Start the ripple effect from the base square
     let visited = new Set([parseInt(baseSquare.dataset.index)]); // Track visited squares
 
@@ -356,7 +377,7 @@ function solveGame(grid, gridSize, numColours) {
 
         // Check win condition
         if (currentState.hasWon()) {
-            console.log(`Moves to win: ${currentState.movesToMake} [${currentState.moveSequence.join(", ")}]`);
+            // console.log(`Moves to win: ${currentState.movesToMake} [${currentState.moveSequence.join(", ")}]`);
             return currentState.moveSequence; // Return the optimal sequence
         }
 
@@ -393,7 +414,7 @@ async function solveGameAsync(grid, gridSize, numColours) {
 
         // Check win condition
         if (currentState.hasWon()) {
-            console.log(`Moves to win: ${currentState.movesToMake} [${currentState.moveSequence.join(", ")}]`);
+            // console.log(`Moves to win: ${currentState.movesToMake} [${currentState.moveSequence.join(", ")}]`);
             return currentState.moveSequence; // Return the optimal sequence
         }
 
@@ -429,23 +450,13 @@ async function handleSolve() {
     const solution = await solveGameAsync(gridArray, gridSize, colors.length);
 
     if (solution.length > 0) {
-        console.log(`Optimal number of moves: ${solution.length}`);
-        console.log(`Optimal move sequence: [${solution.join(", ")}]`);
+        gameData.parScore = solution.length;
+        // console.log(`Optimal number of moves: ${solution.length}`);
+        // console.log(`Optimal move sequence: [${solution.join(", ")}]`);
     } else {
         console.log("No solution found.");
     }
 }
-
-// Sample data for testing
-const gameData = {
-    gamesPlayed: 9,
-    winPercentage: 100,
-    currentStreak: 9,
-    maxStreak: 9,
-    guessDistribution: [0, 0, 5, 2, 0, 2], // Number of games solved on each guess attempt
-    parScore: 5,  // Example par score
-    actualScore: 7 // Example actual score
-};
 
 // Function to open and populate the stats popup
 function showStatsPopup() {
@@ -470,7 +481,7 @@ function showStatsPopup() {
 
         const label = document.createElement("span");
         label.classList.add("distribution-bar-count");
-        label.textContent = index + 1; // Label for guess count
+        label.textContent = index; // Label for guess count
 
         const bar = document.createElement("div");
         bar.classList.add("distribution-bar");
@@ -535,14 +546,14 @@ function saveGameState() {
     const gameState = {
         date,
         gridState,
-        moveCount
     };
 
     localStorage.setItem('tileEffectDailyState', JSON.stringify(gameState));
+    saveHistoricalData();
 }
 
 function loadGameState() {
-    const savedState = localStorage.getItem('tileEffectDailyState');
+    const savedState = localStorage.getItem("tileEffectDailyState");
     if (!savedState) {
         return false; // No saved state, so initialize a new game
     }
@@ -578,4 +589,7 @@ function loadGameState() {
 
 function clearSave() {
     localStorage.removeItem('tileEffectDailyState'); 
+    localStorage.removeItem("tileEffectGameData");
 }
+
+// clearSave();
