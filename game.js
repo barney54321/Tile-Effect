@@ -28,7 +28,8 @@ function loadHistoricData() {
             maxStreak: 0,
             guessDistribution: [0, 0, 0, 0, 0, 0], // Number of games solved on each guess attempt
             parScore: -1,
-            actualScore: 0
+            actualScore: 0,
+            lastPlayedDate: "2000-01-01",
         }
     }
 
@@ -162,6 +163,26 @@ function getNeighbors(index) {
     return neighbors;
 }
 
+function updateDailyStats() {
+    const today = new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
+
+    if (gameData.lastPlayedDate !== today) {
+        gameData.gamesPlayed += 1;
+        gameData.actualScore = parseInt(moveCountDisplay.textContent);
+        const parScore = gameData.parScore;
+
+        const guessIndex = Math.min(gameData.actualScore - parScore, 5);
+        gameData.guessDistribution[guessIndex] += 1;
+
+        gameData.currentStreak += 1;
+        gameData.maxStreak = Math.max(gameData.maxStreak, gameData.currentStreak);
+        gameData.winPercentage = Math.round((gameData.gamesPlayed === 0 ? 0 : (100 * gameData.guessDistribution.reduce((a, b) => a + b, 0) / gameData.gamesPlayed)));
+
+        gameData.lastPlayedDate = today;
+        saveHistoricalData();
+    }
+}
+
 // Check if all squares are the same color
 function checkWinCondition() {
     const targetColorIndex = parseInt(baseSquare.dataset.colorIndex);
@@ -169,6 +190,7 @@ function checkWinCondition() {
     
     if (allSameColor) {
         if (gameMode == GameMode.DAILY) {
+            updateDailyStats();
             showStatsPopup();
         } else {
             resetGame();
