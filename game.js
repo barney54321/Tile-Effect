@@ -592,4 +592,11 @@ function clearSave() {
     localStorage.removeItem("tileEffectGameData");
 }
 
-// clearSave();
+function setMenuColours() {
+    squares = document.getElementById("menu-grid");
+    Array.from(squares.children).forEach((child, index) => {
+        child.style.backgroundColor = colors[index];
+    })
+}
+
+setMenuColours()
