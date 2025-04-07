@@ -1,5 +1,5 @@
 const GameMode = Object.freeze({
-    DAILY: Symbol("endless"),
+    DAILY: Symbol("daily"),
     ENDLESS: Symbol("endless")
 })
 
