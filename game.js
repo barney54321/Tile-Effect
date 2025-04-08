@@ -58,6 +58,11 @@ function initGrid() {
             // Saved state was successfully loaded, so no need to initialize a new grid
             return;
         }
+
+        // If false, we need to reset the score
+        gameData.actualScore = 0;
+        moveCountDisplay.textContent = "0";
+        saveHistoricalData();
     } else {
         randomFunc = Math.random;
     }
