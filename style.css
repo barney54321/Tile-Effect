@@ -190,3 +190,7 @@ h2 {
 #closePopup:active {
     transform: translateY(1px); /* Push down effect on click */
 }
+
+.full-height {
+    height: calc(var(--vh, 1vh) * 100);
+}
