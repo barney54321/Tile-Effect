@@ -5,7 +5,7 @@ const GameMode = Object.freeze({
 
 const gridSize = 6;
 const startColor = "#808080";
-const colors = ["#1E3A8A", "#10B981", "#F59E0B", "#EF4444", "#A5158C", "#255F38"];
+const colors = ["#1E3A8A", "#F59E0B", "#10B981", "#EF4444", "#A5158C", "#255F38"];
 let currentBaseColor = null;
 let baseSquare = null;
 let canClick = true;
@@ -501,19 +501,36 @@ function showStatsPopup() {
     const distributionChart = document.getElementById("guessDistribution");
     distributionChart.innerHTML = ''; // Clear previous bars
 
+    const total = gameData.guessDistribution.reduce((a, b) => a + b, 0);
+
     gameData.guessDistribution.forEach((count, index) => {
         const barContainer = document.createElement("div");
         barContainer.style.display = 'flex';
         barContainer.style.alignItems = 'center';
+        barContainer.style.marginBottom = '4px';
 
         const label = document.createElement("span");
         label.classList.add("distribution-bar-count");
-        label.textContent = index; // Label for guess count
+        label.style.width = '20px';
+        label.style.marginRight = '6px';
+        label.textContent = index < 5 ? index : "5+"; // Label for guess count
 
         const bar = document.createElement("div");
         bar.classList.add("distribution-bar");
-        bar.style.width = `${count * 20}px`; // Adjust width per count
-        bar.textContent = count > 0 ? count : ''; // Show count if non-zero
+
+        // Calculate percentage width
+        const percent = total === 0 ? 0 : (count / total) * 100;
+        bar.style.width = `${percent}%`;
+        bar.style.minWidth = '2px'; // So it's not invisible if small
+        bar.style.height = '24px';
+        bar.style.backgroundColor = colors[index];
+        bar.style.color = 'white';
+        bar.style.textAlign = 'right';
+        bar.style.paddingRight = '6px';
+        bar.style.lineHeight = '24px';
+        bar.style.borderRadius = '4px';
+
+        bar.textContent = count > 0 ? count : '';
 
         barContainer.appendChild(label);
         barContainer.appendChild(bar);
