@@ -5,7 +5,7 @@ const GameMode = Object.freeze({
 
 const gridSize = 6;
 const startColor = "#808080";
-const colors = ["#1E3A8A", "#F59E0B", "#10B981", "#EF4444", "#A5158C", "#255F38"];
+const colors = ["#1E3A8A", "#F59E0B", "#2CBCA4", "#EF4444", "#A5158C", "#1D7C4D"];
 let currentBaseColor = null;
 let baseSquare = null;
 let canClick = true;
