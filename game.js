@@ -691,6 +691,11 @@ function setMenuColours() {
     Array.from(squares.children).forEach((child, index) => {
         child.style.backgroundColor = colors[index];
     })
+
+    if (colourblindMode) {
+        const body = document.body;
+        body.classList.toggle('colorblind-mode');
+    }
 }
 
 function setFullHeight() {
