@@ -1,87 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tile Effect Game</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="mainMenu.css">
-</head>
-<body>
-    <div class="full-height">
-        <div id="mainMenu" class="menu-overlay">
-            <div class="menu-content">
-                <h1 id="gameTitle">Tile Effect</h1>
-                <div class="icon-grid" id="menu-grid">
-                    <div class="icon-square" style="background-color: #1E3A8A;"></div>
-                    <div class="icon-square" style="background-color: #10B981;"></div>
-                    <div class="icon-square" style="background-color: #F59E0B;"></div>
-                    <div class="icon-square" style="background-color: #EF4444;"></div>
-                    <div class="icon-square" style="background-color: #8B5CF6;"></div>
-                    <div class="icon-square" style="background-color: #EC4899;"></div>
-                </div>
-                <div class="button-container">
-                    <button class="menu-button" onclick="startDaily()">Daily</button>
-                    <button class="menu-button" onclick="startEndless()">Endless</button>
-                </div>
-            </div>
-        </div>
-
-        <div id="game">
-            <h1 id="title">Tile Effect</h1>
-            <p id="moveBlock">Moves: <span id="moveCount">0</span></p>
-            <div id="grid"></div>
-            <div id="controls">
-                <div id="buttons"></div>
-            </div>
-        </div>
-
-        <div id="statsPopup" class="popup hidden">
-            <h2>Statistics</h2>
-        
-        <!-- Grid layout for scores and main stats -->
-        <div class="stats-grid">
-            <div class="score-stats">
-                <div class="stat">
-                    <p class="stat-value" id="parScore">0</p>
-                    <p class="stat-label">Goal</p>
-                </div>
-                <div class="stat">
-                    <p class="stat-value" id="actualScore">0</p>
-                    <p class="stat-label">Score</p>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Tile Effect Game</title>
+        <link rel="stylesheet" href="style.css" />
+        <link rel="stylesheet" href="mainMenu.css" />
+    </head>
+    <body>
+        <div class="full-height">
+            <div id="mainMenu" class="menu-overlay">
+                <div class="menu-content">
+                    <h1 id="gameTitle">Tile Effect</h1>
+                    <div class="icon-grid" id="menu-grid">
+                        <div class="icon-square"></div>
+                        <div class="icon-square"></div>
+                        <div class="icon-square"></div>
+                        <div class="icon-square"></div>
+                        <div class="icon-square"></div>
+                        <div class="icon-square"></div>
+                    </div>
+                    <div class="button-container">
+                        <button class="menu-button" onclick="startDaily()">
+                            Daily
+                        </button>
+                        <button class="menu-button" onclick="startEndless()">
+                            Endless
+                        </button>
+                    </div>
                 </div>
             </div>
 
-            <!-- Main stats row -->
-            <div class="main-stats">
-                <div class="stat">
-                    <p class="stat-value" id="gamesPlayed">0</p>
-                    <p class="stat-label">Games Played</p>
-                </div>
-                <div class="stat">
-                    <p class="stat-value" id="winPercentage">0</p>
-                    <p class="stat-label">Win Rate (%)</p>
-                </div>
-                <div class="stat">
-                    <p class="stat-value" id="currentStreak">0</p>
-                    <p class="stat-label">Current<br>Streak</p>
-                </div>
-                <div class="stat">
-                    <p class="stat-value" id="maxStreak">0</p>
-                    <p class="stat-label">Max<br>Streak</p>
+            <div id="game">
+                <h1 id="title">Tile Effect</h1>
+                <p id="moveBlock">Moves: <span id="moveCount">0</span></p>
+                <div id="grid"></div>
+                <div id="controls">
+                    <div id="buttons"></div>
                 </div>
             </div>
-        </div>
-            
-            <!-- Guess distribution -->
-            <h3>Guess Distribution</h3>
-            <div id="guessDistribution" class="distribution-chart"></div>
-        
-            <!-- Close button -->
-            <button id="closePopup" onclick="closePopup()">Endless</button>
-        </div>
-    </div>
 
-    <script src="game.js"></script>
-</body>
+            <div id="statsPopup" class="popup hidden">
+                <h2>Statistics</h2>
+
+                <!-- Grid layout for scores and main stats -->
+                <div class="stats-grid">
+                    <div class="score-stats">
+                        <div class="stat">
+                            <p class="stat-value" id="parScore">0</p>
+                            <p class="stat-label">Goal</p>
+                        </div>
+                        <div class="stat">
+                            <p class="stat-value" id="actualScore">0</p>
+                            <p class="stat-label">Score</p>
+                        </div>
+                    </div>
+
+                    <!-- Main stats row -->
+                    <div class="main-stats">
+                        <div class="stat">
+                            <p class="stat-value" id="gamesPlayed">0</p>
+                            <p class="stat-label">Games Played</p>
+                        </div>
+                        <div class="stat">
+                            <p class="stat-value" id="winPercentage">0</p>
+                            <p class="stat-label">Win Rate (%)</p>
+                        </div>
+                        <div class="stat">
+                            <p class="stat-value" id="currentStreak">0</p>
+                            <p class="stat-label">Current<br />Streak</p>
+                        </div>
+                        <div class="stat">
+                            <p class="stat-value" id="maxStreak">0</p>
+                            <p class="stat-label">Max<br />Streak</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Guess distribution -->
+                <h3>Guess Distribution</h3>
+                <div id="guessDistribution" class="distribution-chart"></div>
+
+                <!-- Close button -->
+                <button id="closePopup" onclick="closePopup()">Endless</button>
+            </div>
+        </div>
+
+        <script src="game.js"></script>
+    </body>
 </html>
