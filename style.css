@@ -194,3 +194,8 @@ h2 {
 .full-height {
     height: calc(var(--vh, 1vh) * 100);
 }
+
+body {
+    margin: 0;
+    overflow: hidden;
+}
