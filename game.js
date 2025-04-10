@@ -5,7 +5,18 @@ const GameMode = Object.freeze({
 
 const gridSize = 6;
 const startColor = "#808080";
+
 const colors = ["#1E3A8A", "#F59E0B", "#2CBCA4", "#EF4444", "#A5158C", "#1D7C4D"];
+
+const patterns = [
+    "pattern-horizontal",
+    "pattern-vertical",
+    "pattern-diagonal",
+    "pattern-cross-diagonal",
+    "pattern-dots",
+    "pattern-grid"
+];
+
 let currentBaseColor = null;
 let baseSquare = null;
 let canClick = true;
@@ -37,6 +48,19 @@ function loadHistoricData() {
 }
 
 const gameData = loadHistoricData();
+
+function loadColourBlind() {
+    const data = localStorage.getItem("tileEffectSettings");
+
+    if (!data) {
+        return false;
+    }
+
+    return JSON.parse(data)["colourBlind"]
+}
+
+let colourblindMode = loadColourBlind();
+
 moveCountDisplay.textContent = gameData.actualScore;
 
 function saveHistoricalData() {
@@ -78,10 +102,18 @@ function initGrid() {
             square.style.backgroundColor = colors[colorIndex];
             baseSquare = square;
             currentBaseColor = colorIndex;
+
+            if (colourblindMode) {
+                square.classList.add(patterns[colorIndex]);
+            }
         } else {
             colorIndex = Math.floor(randomFunc() * colors.length);
             square.style.backgroundColor = colors[colorIndex];
             square.dataset.colorIndex = colorIndex;
+
+            if (colourblindMode) {
+                square.classList.add(patterns[colorIndex]);
+            }
         }
 
         gridContainer.appendChild(square);
@@ -102,6 +134,10 @@ function initButtons() {
         button.style.backgroundColor = color;
         button.addEventListener("click", () => handleColorChange(index));
         buttonsContainer.appendChild(button);
+
+        if (colourblindMode) {
+            button.classList.add(patterns[index]);
+        }
     });
 }
 
@@ -123,9 +159,13 @@ function rippleEffect(colorIndex) {
     let queue = [baseSquare];
     baseSquare.dataset.colorIndex = colorIndex;
     baseSquare.style.backgroundColor = newColor;
-    let layer = 0;
     const visited = new Set(); // Track visited tiles
     visited.add(baseSquare.dataset.index);
+
+    if (colourblindMode) {
+        patterns.forEach(pattern => baseSquare.classList.remove(pattern));
+        baseSquare.classList.add(patterns[colorIndex]);
+    }
 
     function processLayer() {
         if (queue.length === 0) {
@@ -146,6 +186,11 @@ function rippleEffect(colorIndex) {
                     neighbor.dataset.colorIndex = colorIndex;
                     neighbor.style.backgroundColor = newColor;
                     queue.push(neighbor);
+
+                    if (colourblindMode) {
+                        patterns.forEach(pattern => neighbor.classList.remove(pattern));
+                        neighbor.classList.add(patterns[colorIndex]);
+                    }
                 }
             });
         });
@@ -215,6 +260,7 @@ function resetGame() {
         currentWave.forEach(square => {
             square.style.backgroundColor = neutralColor;
             square.dataset.colorIndex = -1; // Temporary index for neutral color
+            patterns.forEach(pattern => square.classList.remove(pattern));
 
             // Get neighbors and add to the next wave if not visited
             const index = parseInt(square.dataset.index);
@@ -258,6 +304,10 @@ function resetGame() {
                     const targetColorIndex = targetColors[index];
                     square.style.backgroundColor = colors[targetColorIndex];
                     square.dataset.colorIndex = targetColorIndex;
+
+                    if (colourblindMode) {
+                        square.classList.add(patterns[targetColorIndex]);
+                    }
                 }
 
                 // Get neighbors and add to the next wave if not visited
@@ -647,6 +697,43 @@ function setFullHeight() {
     const vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--vh', `${vh}px`);
 }
+
+function toggleColourblindMode() {
+    colourblindMode = !colourblindMode;
+
+    // Re-apply patterns or remove them from all tiles and buttons
+    const allSquares = document.querySelectorAll(".square"); // update selector if needed
+    allSquares.forEach(square => {
+        patterns.forEach(pattern => square.classList.remove(pattern));
+        if (colourblindMode) {
+            const index = parseInt(square.dataset.colorIndex);
+            square.classList.add(patterns[index]);
+        }
+    });
+
+    // Also update the buttons
+    const allButtons = document.querySelectorAll(".color-button"); // update selector if needed
+    allButtons.forEach((btn, index) => {
+        patterns.forEach(pattern => btn.classList.remove(pattern));
+        if (colourblindMode) {
+            btn.classList.add(patterns[index]);
+        }
+    });
+
+    const body = document.body;
+    body.classList.toggle('colorblind-mode');
+
+    saveSettings();
+}
+
+function saveSettings() {
+    const settings = {
+        "colourBlind": colourblindMode
+    }
+
+    localStorage.setItem('tileEffectSettings', JSON.stringify(settings));
+}
+
 
 // Call it on load and resize
 window.addEventListener('load', setFullHeight);

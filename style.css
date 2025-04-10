@@ -204,3 +204,94 @@ body {
     margin: 0;
     overflow: hidden;
 }
+
+.pattern-horizontal {
+    background-image: repeating-linear-gradient(
+        0deg,
+        rgba(255,255,255,0.3) 0px,
+        rgba(255,255,255,0.3) 10px,
+        transparent 10px,
+        transparent 20px
+    );
+}
+
+.pattern-vertical {
+    background-image: repeating-linear-gradient(
+        90deg,
+        rgba(255,255,255,0.3) 0px,
+        rgba(255,255,255,0.3) 10px,
+        transparent 10px,
+        transparent 20px
+    );
+}
+
+.pattern-diagonal {
+    background-image: repeating-linear-gradient(
+        45deg,
+        rgba(255,255,255,0.3) 0px,
+        rgba(255,255,255,0.3) 10px,
+        transparent 10px,
+        transparent 20px
+    );
+}
+
+.pattern-cross-diagonal {
+    background-image: repeating-linear-gradient(
+        -45deg,
+        rgba(255,255,255,0.3) 0px,
+        rgba(255,255,255,0.3) 10px,
+        transparent 10px,
+        transparent 20px
+    );
+}
+
+.pattern-dots {
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.5) 20%, transparent 20%);
+    background-size: 10px 10px;
+}
+
+.pattern-grid {
+    background-image: 
+        repeating-linear-gradient(
+            0deg,
+            rgba(255,255,255,0.3) 0px,
+            rgba(255,255,255,0.3) 2px,
+            transparent 2px,
+            transparent 10px
+        ),
+        repeating-linear-gradient(
+            90deg,
+            rgba(255,255,255,0.3) 0px,
+            rgba(255,255,255,0.3) 2px,
+            transparent 2px,
+            transparent 10px
+        );
+}
+
+
+#toggleColourblind {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+    z-index: 1000;
+    color: #aaa;
+    transition: color 0.3s ease;
+}
+
+#toggleColourblind:hover {
+    color: #555;
+}
+
+#toggleColourblind svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* When colorblind mode is active, highlight the icon */
+body.colorblind-mode #toggleColourblind {
+    color: #10B981;
+}
