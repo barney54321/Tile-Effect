@@ -300,3 +300,25 @@ body.colorblind-mode #toggleColourblind {
     border: none;
     box-shadow: none !important;
 }
+
+#homeButton {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    z-index: 9999;
+    cursor: pointer;
+    color: #e0e0e0;
+    transition: color 0.3s ease;
+}
+
+#homeButton svg {
+    width: 28px;
+    height: 28px;
+}
+
+#homeButton:hover {
+    color: #888;
+}

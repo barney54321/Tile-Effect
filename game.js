@@ -92,6 +92,7 @@ function initGrid() {
     // Step 1: Create grid with hidden tiles
     for (let i = 0; i < gridSize * gridSize; i++) {
         const square = document.createElement("div");
+        square.id = "squares-div";
         square.classList.add("square", "hidden-tile");
         square.dataset.index = i;
 
@@ -688,6 +689,7 @@ function loadGameState() {
 
     for (let i = 0; i < gridSize * gridSize; i++) {
         const square = document.createElement("div");
+        square.id = "squares-div";
         square.classList.add("square");
         square.dataset.index = i;
 
@@ -770,5 +772,17 @@ function saveSettings() {
 // Call it on load and resize
 window.addEventListener('load', setFullHeight);
 window.addEventListener('resize', setFullHeight);
+
+function returnToMenu() {
+    // Remove all squares
+    const gridContainer = document.getElementById("squares-div");
+    gridContainer.innerHTML = "";
+
+    // Show the main menu
+    document.getElementById("mainMenu").style.display = "flex";
+
+    // Optionally disable interaction until a new game is started
+    canClick = false;
+}
 
 setMenuColours()
