@@ -294,3 +294,9 @@ body {
 body.colorblind-mode #toggleColourblind {
     color: #10B981; /* active highlight */
 }
+
+.hidden-tile {
+    background-color: transparent !important;
+    border: none;
+    box-shadow: none !important;
+}

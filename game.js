@@ -73,17 +73,15 @@ function initGrid() {
     gridContainer.innerHTML = '';
 
     let randomFunc;
+    const baseIndex = gridSize * gridSize - gridSize;
+    const colorIndices = [];
+
     if (gameMode === GameMode.DAILY) {
-        const date = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+        const date = new Date().toISOString().slice(0, 10);
         randomFunc = seededRandom(date);
 
-        // Attempt to load saved game state for Daily mode
-        if (loadGameState()) {
-            // Saved state was successfully loaded, so no need to initialize a new grid
-            return;
-        }
+        if (loadGameState()) return;
 
-        // If false, we need to reset the score
         gameData.actualScore = 0;
         moveCountDisplay.textContent = "0";
         saveHistoricalData();
@@ -91,38 +89,67 @@ function initGrid() {
         randomFunc = Math.random;
     }
 
+    // Step 1: Create grid with hidden tiles
     for (let i = 0; i < gridSize * gridSize; i++) {
         const square = document.createElement("div");
-        square.classList.add("square");
+        square.classList.add("square", "hidden-tile");
         square.dataset.index = i;
 
-        let colorIndex;
-        if (i === gridSize * gridSize - gridSize) {
-            colorIndex = -1; // Assign base tile to first color
-            square.style.backgroundColor = colors[colorIndex];
+        const colorIndex = Math.floor(randomFunc() * colors.length);
+        colorIndices.push(colorIndex);
+
+        if (i === baseIndex) {
             baseSquare = square;
-            currentBaseColor = colorIndex;
-
-            if (colourblindMode) {
-                square.classList.add(patterns[colorIndex]);
-            }
-        } else {
-            colorIndex = Math.floor(randomFunc() * colors.length);
-            square.style.backgroundColor = colors[colorIndex];
-            square.dataset.colorIndex = colorIndex;
-
-            if (colourblindMode) {
-                square.classList.add(patterns[colorIndex]);
-            }
+            currentBaseColor = -1;
         }
 
         gridContainer.appendChild(square);
         grid.push(square);
     }
 
-    if (gameMode == GameMode.DAILY) {
-        handleSolve();
-    }
+    // Step 2: Ripple in actual colors
+    let currentWave = [baseSquare];
+    let visited = new Set([baseIndex]);
+
+    const interval = setInterval(() => {
+        const nextWave = [];
+
+        currentWave.forEach(square => {
+            const index = parseInt(square.dataset.index);
+            const isBase = index === baseIndex;
+            const colorIndex = isBase ? -1 : colorIndices[index];
+
+            square.classList.remove("hidden-tile");
+            square.dataset.colorIndex = colorIndex;
+
+            const color = isBase ? startColor : colors[colorIndex];
+            square.style.backgroundColor = color;
+
+            if (colourblindMode && !isBase) {
+                square.classList.add(patterns[colorIndex]);
+            }
+
+            // Optional animation class
+            square.classList.add("ripple-anim");
+            setTimeout(() => square.classList.remove("ripple-anim"), 250);
+
+            getNeighbors(index).forEach(neighbor => {
+                const neighborIndex = parseInt(neighbor.dataset.index);
+                if (!visited.has(neighborIndex)) {
+                    visited.add(neighborIndex);
+                    nextWave.push(neighbor);
+                }
+            });
+        });
+
+        if (nextWave.length === 0) {
+            clearInterval(interval);
+            canClick = true;
+            if (gameMode === GameMode.DAILY) handleSolve();
+        } else {
+            currentWave = nextWave;
+        }
+    }, rippleDelay);
 }
 
 // Initialize color buttons
