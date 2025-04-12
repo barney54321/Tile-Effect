@@ -27,6 +27,7 @@ const gridContainer = document.getElementById("grid");
 const buttonsContainer = document.getElementById("buttons");
 const moveCountDisplay = document.getElementById("moveCount");
 const title = document.getElementById("title");
+const majorButtons = [...document.getElementsByClassName("major-buttons")];
 
 function loadHistoricData() {
     const data = localStorage.getItem("tileEffectGameData");
@@ -565,6 +566,10 @@ async function handleSolve() {
 
 // Function to open and populate the stats popup
 function showStatsPopup() {
+    majorButtons.forEach(button => {
+        button.style.display = "none";
+    })
+
     // Populate new score stats
     document.getElementById("parScore").textContent = gameData.parScore;
     document.getElementById("actualScore").textContent = gameData.actualScore;
@@ -643,6 +648,9 @@ function startEndless() {
 
 function hideMenu() {
     document.getElementById("mainMenu").style.display = "none";
+    majorButtons.forEach(button => {
+        button.style.display = "block";
+    })
 }
 
 function seededRandom(seed) {
@@ -783,6 +791,10 @@ function returnToMenu() {
 
     // Optionally disable interaction until a new game is started
     canClick = false;
+    
+    majorButtons.forEach(button => {
+        button.style.display = "none";
+    })
 }
 
 setMenuColours()

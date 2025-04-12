@@ -322,3 +322,7 @@ body.colorblind-mode #toggleColourblind {
 #homeButton:hover {
     color: #888;
 }
+
+.major-buttons {
+    display: none;
+}
