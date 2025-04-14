@@ -35,7 +35,6 @@ function loadHistoricData() {
     if (!data) {
         return {
             gamesPlayed: 0,
-            winPercentage: 0,
             currentStreak: 0,
             maxStreak: 0,
             guessDistribution: [0, 0, 0, 0, 0, 0], // Number of games solved on each guess attempt
@@ -174,7 +173,11 @@ function initButtons() {
 function handleColorChange(colorIndex) {
     if (canClick && colorIndex !== parseInt(baseSquare.dataset.colorIndex)) {
         canClick = false;
-        gameData.actualScore++;
+
+        if (gameMode === GameMode.DAILY) {
+            gameData.actualScore++;
+        }
+        
         moveCountDisplay.textContent = gameData.actualScore;
         rippleEffect(colorIndex);
     }
@@ -574,9 +577,12 @@ function showStatsPopup() {
     document.getElementById("parScore").textContent = gameData.parScore;
     document.getElementById("actualScore").textContent = gameData.actualScore;
 
+    const summedScores = gameData.guessDistribution.map((val, index) => index * val).reduce((a, b) => a + b, 0);
+    const ave = summedScores / gameData.guessDistribution.length;
+
     // Populate main stats
     document.getElementById("gamesPlayed").textContent = gameData.gamesPlayed;
-    document.getElementById("winPercentage").textContent = gameData.winPercentage;
+    document.getElementById("aveScore").textContent = ave.toFixed(1);
     document.getElementById("currentStreak").textContent = gameData.currentStreak;
     document.getElementById("maxStreak").textContent = gameData.maxStreak;
 
@@ -585,7 +591,6 @@ function showStatsPopup() {
     distributionChart.innerHTML = ''; // Clear previous bars
 
     const total = gameData.guessDistribution.reduce((a, b) => a + b, 0);
-
     gameData.guessDistribution.forEach((count, index) => {
         const barContainer = document.createElement("div");
         barContainer.style.display = 'flex';
