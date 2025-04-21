@@ -246,9 +246,15 @@ function getNeighbors(index) {
 }
 
 function updateDailyStats() {
-    const today = new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
+    const today = new Date();
+    const todayStr = today.toISOString().slice(0, 10); // "YYYY-MM-DD"
 
-    if (gameData.lastPlayedDate !== today) {
+    // Compute yesterday's date string
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+    const yesterdayStr = yesterday.toISOString().slice(0, 10);
+
+    if (gameData.lastPlayedDate !== todayStr) {
         gameData.gamesPlayed += 1;
         gameData.actualScore = parseInt(moveCountDisplay.textContent);
         const parScore = gameData.parScore;
@@ -256,11 +262,19 @@ function updateDailyStats() {
         const guessIndex = Math.min(gameData.actualScore - parScore, 5);
         gameData.guessDistribution[guessIndex] += 1;
 
-        gameData.currentStreak += 1;
-        gameData.maxStreak = Math.max(gameData.maxStreak, gameData.currentStreak);
-        gameData.winPercentage = Math.round((gameData.gamesPlayed === 0 ? 0 : (100 * gameData.guessDistribution.reduce((a, b) => a + b, 0) / gameData.gamesPlayed)));
+        // Check streak logic
+        if (gameData.lastPlayedDate === yesterdayStr) {
+            gameData.currentStreak += 1;
+        } else {
+            gameData.currentStreak = 1;
+        }
 
-        gameData.lastPlayedDate = today;
+        gameData.maxStreak = Math.max(gameData.maxStreak, gameData.currentStreak);
+        gameData.winPercentage = Math.round(
+            (100 * gameData.guessDistribution.reduce((a, b) => a + b, 0)) / gameData.gamesPlayed
+        );
+
+        gameData.lastPlayedDate = todayStr;
         saveHistoricalData();
     }
 }
